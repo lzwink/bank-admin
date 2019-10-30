@@ -1,8 +1,8 @@
 package main
 
 import (
+	_ "bank-admin/routers"
 	"github.com/astaxie/beego"
-	_ "project1/routers"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package routers
 
 import (
+	"bank-admin/controllers"
 	"github.com/astaxie/beego"
-	"project1/controllers"
 )
 
 func init() {
