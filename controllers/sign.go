@@ -20,5 +20,9 @@ func (ctx *SignController) CreateSign() {
 	if err != nil {
 		ctx.JsonEncode(101, "failed", nil, 0)
 	}
+	err = userModel.UpdateUserIsSign(userId)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
 	ctx.JsonEncode(0, "success", nil, 0)
 }

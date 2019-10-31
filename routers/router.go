@@ -16,4 +16,6 @@ func init() {
 	beego.Router("/Logout", &controllers.LoginController{}, "get:Logout")
 
 	beego.Router("/CreateSign", &controllers.SignController{}, "get:CreateSign")
+
+	beego.Router("/CreateDraw", &controllers.DrawController{}, "get:CreateDraw")
 }

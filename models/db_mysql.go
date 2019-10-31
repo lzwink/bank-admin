@@ -1,9 +1,13 @@
 package models
 
+/*
+数据库操作
+*/
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
 )
 
 var (
@@ -12,18 +16,28 @@ var (
 
 func init() {
 	orm.Debug = true
-	orm.RegisterDriver("mysql", orm.DRMySQL)
+	err := orm.RegisterDriver("mysql", orm.DRMySQL)
+	if err != nil {
+		log.Println("数据库驱动注册错误：", err.Error())
+	}
 	// set default database
 	bankSource := beego.AppConfig.String("username") +
 		":" + beego.AppConfig.String("password") +
 		"@tcp(" + beego.AppConfig.String("host") + ")/" +
 		beego.AppConfig.String("database") + "?charset=utf8"
-	orm.RegisterDataBase("default", "mysql", bankSource, 10, 30)
+	err = orm.RegisterDataBase("default", "mysql", bankSource, 10, 30)
+	if err != nil {
+		log.Println("数据库注册错误：", err.Error())
+	}
 
 	orm.RegisterModel(new(Users))
 	orm.RegisterModel(new(Sign))
+	orm.RegisterModel(new(Draw))
 
 	//default model
 	o = orm.NewOrm()
-	o.Using("default")
+	err = o.Using("default")
+	if err != nil {
+		log.Println("默认数据库实例化错误：", err.Error())
+	}
 }
