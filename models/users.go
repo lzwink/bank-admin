@@ -1,6 +1,9 @@
 package models
 
-import "log"
+import (
+	"github.com/astaxie/beego/orm"
+	"log"
+)
 
 type Users struct {
 	Id            int `orm:"pk"`
@@ -23,17 +26,18 @@ func (u *Users) GetAllUsers() ([]Users, error) {
 	fieldStr := make([]string, 0)
 	_, err := objectTable.RelatedSel().All(&result, fieldStr...)
 	if err != nil {
-		log.Println("GetAllUsers error: " + err.Error())
+		log.Println("获取全部用户信息错误: " + err.Error())
 	}
 	return result, err
 }
 
 func (u *Users) GetUserById(id int) (Users, error) {
-	result := Users{}
-	objectTable := o.QueryTable(new(Users))
-	err := objectTable.RelatedSel().Filter("id", id).One(&result)
-	if err != nil {
-		log.Println("GetUserById error: " + err.Error())
+	result := Users{Id: id}
+	err := o.Read(&result)
+	if err == orm.ErrNoRows {
+		log.Println("根据id查询用户错误")
+	} else if err == orm.ErrMissPK {
+		log.Println("根据id查询用户错误: 找不到主键")
 	}
 	return result, err
 }
@@ -61,9 +65,8 @@ func (u *Users) GetUserByCombatGroupId(combatGroupId int) ([]Users, error) {
 }
 
 func (u *Users) CheckUserPwd(userName string, userPwd string) error {
-	result := Users{}
-	objectTable := o.QueryTable(new(Users))
-	err := objectTable.RelatedSel().Filter("user_name", userName).Filter("pwd", userPwd).One(&result)
+	result := Users{UserName: userName, Pwd: userPwd}
+	err := o.Read(&result, "UserName", "Pwd")
 	if err != nil {
 		log.Println("CheckUserPwd error: " + err.Error())
 		return err
@@ -71,6 +74,16 @@ func (u *Users) CheckUserPwd(userName string, userPwd string) error {
 	return err
 }
 
-//func (u *Users) UpdateUserPwd(oldPwd string, newPwd string) error {
-//
-//}
+func (u *Users) UpdateUserPwd(userName string, oldPwd string, newPwd string) error {
+	user := Users{UserName: userName, Pwd: oldPwd}
+	err := o.Read(&user, "UserName", "Pwd")
+	if err == nil {
+		user.Pwd = newPwd
+		if _, err := o.Update(&user, "Pwd"); err == nil {
+			return err
+		}
+		log.Println("更新用户密码错误：", err.Error())
+	}
+	log.Println("用户原密码错误：", err.Error())
+	return err
+}

@@ -1,12 +1,12 @@
 package test
 
 import (
-	"bank-admin/controllers"
+	"bank-admin/models"
 	_ "bank-admin/routers"
+	"log"
 	"testing"
 )
 
 func TestUsers(t *testing.T) {
-	//log.Println((&models.Users{}).GetUserByCombatGroupId(1))
-	(&controllers.UsersController{}).GetAllUsers()
+	log.Println((&models.Users{}).GetUserById(2))
 }

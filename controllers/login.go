@@ -20,10 +20,10 @@ func (ctx *LoginController) Logout() {
 	ctx.JsonEncode(0, "success", nil, 0)
 }
 
-//func (ctx *LoginController) Check() {
-//	userName := ctx.GetSession("user_name")
-//	if userName == nil {
-//		ctx.JsonEncode(100, "failed", nil, 0)
-//	}
-//	ctx.JsonEncode(0, "success", nil, 0)
-//}
+func (ctx *LoginController) Check() {
+	userName := ctx.GetSession("user_name")
+	if userName == nil {
+		ctx.JsonEncode(100, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", nil, 0)
+}
