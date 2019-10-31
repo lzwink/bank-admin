@@ -11,12 +11,18 @@ func (ctx *LoginController) Login() {
 	if err != nil {
 		ctx.JsonEncode(100, "failed", nil, 0)
 	}
+	userInfo, err := userModel.GetUserByName(name)
+	if err != nil {
+		ctx.JsonEncode(100, "failed", nil, 0)
+	}
 	ctx.SetSession("user_name", name)
+	ctx.SetSession("user_id", userInfo.Id)
 	ctx.JsonEncode(0, "success", nil, 0)
 }
 
 func (ctx *LoginController) Logout() {
 	ctx.DelSession("user_name")
+	ctx.DelSession("user_id")
 	ctx.JsonEncode(0, "success", nil, 0)
 }
 

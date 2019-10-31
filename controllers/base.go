@@ -89,3 +89,44 @@ func (ctx *BaseController) JsonToString(inter interface{}) (string, error) {
 		return string(by), nil
 	}
 }
+
+func (ctx *BaseController) InterfaceToInt(inter interface{}) (tempInt int) {
+	switch inter.(type) {
+	case nil:
+		tempInt = 0
+		break
+	case string:
+		tempInt, _ = strconv.Atoi(inter.(string))
+		break
+	case int:
+		tempInt = inter.(int)
+		break
+	case int64:
+		tempInt = int(inter.(int64))
+		break
+	case bool:
+		if inter.(bool) == true {
+			tempInt = 1
+		} else {
+			tempInt = 0
+		}
+	case []interface{}:
+		tempInt = len(inter.([]interface{}))
+	case map[string]interface{}:
+		tempInt = len(inter.(map[string]interface{}))
+	default:
+		tempInt = 0
+	}
+	return tempInt
+}
+func (ctx *BaseController) DateToStr(intTime int64) string {
+	timeLayout := "2006-01-02"                              //转化所需模板
+	dataTimeStr := time.Unix(intTime, 0).Format(timeLayout) //设置时间戳 使用模板格式化为日期字符串
+	return dataTimeStr
+}
+
+func (ctx *BaseController) TimeToStr(intTime int64) string {
+	timeLayout := "2006-01-02 15:04:05"                     //转化所需模板
+	dataTimeStr := time.Unix(intTime, 0).Format(timeLayout) //设置时间戳 使用模板格式化为日期字符串
+	return dataTimeStr
+}

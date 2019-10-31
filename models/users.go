@@ -42,6 +42,17 @@ func (u *Users) GetUserById(id int) (Users, error) {
 	return result, err
 }
 
+func (u *Users) GetUserByName(userName string) (Users, error) {
+	result := Users{UserName: userName}
+	err := o.Read(&result, "UserName")
+	if err == orm.ErrNoRows {
+		log.Println("根据用户名查询用户错误")
+	} else if err == orm.ErrMissPK {
+		log.Println("根据用户名查询用户错误：找不到主键")
+	}
+	return result, err
+}
+
 func (u *Users) GetUserByGroupId(groupId int) ([]Users, error) {
 	result := make([]Users, 0)
 	objectTable := o.QueryTable(new(Users))
@@ -53,7 +64,7 @@ func (u *Users) GetUserByGroupId(groupId int) ([]Users, error) {
 	return result, err
 }
 
-func (u *Users) GetUserByCombatGroupId(combatGroupId int) ([]Users, error) {
+func (u *Users) GetUsersByCombatGroupId(combatGroupId int) ([]Users, error) {
 	result := make([]Users, 0)
 	objectTable := o.QueryTable(new(Users))
 	fieldStr := make([]string, 0)
@@ -74,8 +85,8 @@ func (u *Users) CheckUserPwd(userName string, userPwd string) error {
 	return err
 }
 
-func (u *Users) UpdateUserPwd(userName string, oldPwd string, newPwd string) error {
-	user := Users{UserName: userName, Pwd: oldPwd}
+func (u *Users) UpdateUserPwd(userId int, userName string, oldPwd string, newPwd string) error {
+	user := Users{Id: userId, UserName: userName, Pwd: oldPwd}
 	err := o.Read(&user, "UserName", "Pwd")
 	if err == nil {
 		user.Pwd = newPwd

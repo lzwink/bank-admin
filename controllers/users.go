@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"bank-admin/models"
-	"log"
 )
 
 type UsersController struct {
@@ -38,8 +37,8 @@ func (ctx *UsersController) UpdateUserPwd() {
 	oldPwd := ctx.XssFilter(ctx.GetString("oldPwd"))
 	newPwd := ctx.XssFilter(ctx.GetString("newPwd"))
 	userName := ctx.InterfaceToStr(ctx.GetSession("user_name"))
-	log.Println("oldPwd: ", oldPwd, " newPwd: ", newPwd, " userName: ", userName)
-	err := userModel.UpdateUserPwd(userName, oldPwd, newPwd)
+	userId := ctx.InterfaceToInt(ctx.GetSession("user_id"))
+	err := userModel.UpdateUserPwd(userId, userName, oldPwd, newPwd)
 	if err != nil {
 		ctx.JsonEncode(101, "failed", nil, 0)
 	}

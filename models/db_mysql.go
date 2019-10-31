@@ -21,6 +21,7 @@ func init() {
 	orm.RegisterDataBase("default", "mysql", bankSource, 10, 30)
 
 	orm.RegisterModel(new(Users))
+	orm.RegisterModel(new(Sign))
 
 	//default model
 	o = orm.NewOrm()
