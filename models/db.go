@@ -33,6 +33,8 @@ func init() {
 	orm.RegisterModel(new(Users))
 	orm.RegisterModel(new(Sign))
 	orm.RegisterModel(new(Draw))
+	orm.RegisterModel(new(Score))
+	orm.RegisterModel(new(UsersGroup))
 
 	//default model
 	o = orm.NewOrm()

@@ -5,31 +5,29 @@ type LoginController struct {
 }
 
 func (ctx *LoginController) Login() {
-	name := ctx.XssFilter(ctx.GetString("name"))
+	userName := ctx.XssFilter(ctx.GetString("userName"))
 	pwd := ctx.XssFilter(ctx.GetString("pwd"))
-	err := userModel.CheckUserPwd(name, pwd)
+	userInfo, err := userModel.CheckUserPwd(userName, pwd)
 	if err != nil {
 		ctx.JsonEncode(100, "failed", nil, 0)
 	}
-	userInfo, err := userModel.GetUserByName(name)
-	if err != nil {
-		ctx.JsonEncode(100, "failed", nil, 0)
-	}
-	ctx.SetSession("user_name", name)
+	ctx.SetSession("real_name", userInfo.RealName)
+	ctx.SetSession("user_name", userInfo.UserName)
 	ctx.SetSession("user_id", userInfo.Id)
 	ctx.JsonEncode(0, "success", nil, 0)
 }
 
 func (ctx *LoginController) Logout() {
+	ctx.DelSession("real_name")
 	ctx.DelSession("user_name")
 	ctx.DelSession("user_id")
 	ctx.JsonEncode(0, "success", nil, 0)
 }
 
 func (ctx *LoginController) Check() {
-	userName := ctx.GetSession("user_name")
-	if userName == nil {
+	realName := ctx.GetSession("real_name")
+	if realName == nil {
 		ctx.JsonEncode(100, "failed", nil, 0)
 	}
-	ctx.JsonEncode(0, "success", nil, 0)
+	ctx.JsonEncode(0, "success", realName, 0)
 }
