@@ -16,7 +16,7 @@ var (
 )
 
 func (ctx *UsersController) Get() {
-	ctx.JsonEncode(0, "success", "hello world", 0)
+	ctx.TplName = "index.html"
 }
 
 // 获取全部用户信息
