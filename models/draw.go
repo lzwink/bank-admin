@@ -19,6 +19,7 @@ func (d *Draw) TableName() string {
 	return "draw"
 }
 
+// 创建抽奖记录
 func (d *Draw) CreateDraw(userId int, awardId int, createTime string) error {
 	// 获取用户当前信息
 	userModel := Users{}

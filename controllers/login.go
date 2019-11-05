@@ -25,9 +25,9 @@ func (ctx *LoginController) Logout() {
 }
 
 func (ctx *LoginController) Check() {
-	realName := ctx.GetSession("real_name")
-	if realName == nil {
+	userId := ctx.GetSession("user_id")
+	if userId == nil {
 		ctx.JsonEncode(100, "failed", nil, 0)
 	}
-	ctx.JsonEncode(0, "success", realName, 0)
+	ctx.JsonEncode(0, "success", userId, 0)
 }

@@ -63,3 +63,12 @@ func (s *Score) AddRealScore(userName string, eOne float64, eTwo float64, eThree
 	}
 	return err
 }
+
+func (s *Score) GetScoreByUserName(userName string) (Score, error) {
+	score := Score{UserName: userName}
+	err := o.Read(&score, "user_name")
+	if err != nil {
+		log.Println("查找错误：", err.Error())
+	}
+	return score, err
+}

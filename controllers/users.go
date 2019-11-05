@@ -37,6 +37,16 @@ func (ctx *UsersController) GetUserById() {
 	ctx.JsonEncode(0, "success", res, 1)
 }
 
+// 获取登录用户信息
+func (ctx *UsersController) GetLoginUser() {
+	id := ctx.InterfaceToInt(ctx.GetSession("user_id"))
+	user, err := userModel.GetUserById(id)
+	if err != nil {
+		ctx.JsonEncode(100, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", user, 0)
+}
+
 // 根据用户名称获取用户信息
 func (ctx *UsersController) GetUserByRealName() {
 	realName := ctx.XssFilter(ctx.GetString("real_name"))
@@ -135,4 +145,43 @@ func (ctx *UsersController) AddRealScore() {
 		ctx.JsonEncode(101, "failed", nil, 0)
 	}
 	ctx.JsonEncode(0, "success", nil, 0)
+}
+
+// 获取用户分数信息
+func (ctx *UsersController) GetUserScore() {
+	userName := ctx.InterfaceToStr(ctx.GetSession("user_name"))
+	score, err := scoreModel.GetScoreByUserName(userName)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", score, 0)
+}
+
+// 获取对手分数信息
+func (ctx *UsersController) GetOppScore() {
+	id := ctx.InterfaceToInt(ctx.GetSession("user_id"))
+	user, err := userModel.GetUserById(id)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	opp, err := userModel.GetUserById(user.OpponentId)
+	oppScore, err := scoreModel.GetScoreByUserName(opp.UserName)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", oppScore, 0)
+}
+
+// 根据用户获取对手信息
+func (ctx *UsersController) GetOppInfo() {
+	id := ctx.InterfaceToInt(ctx.GetSession("user_id"))
+	user, err := userModel.GetUserById(id)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	opp, err := userModel.GetUserById(user.OpponentId)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", opp, 0)
 }

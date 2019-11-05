@@ -168,3 +168,43 @@ func (u *Users) UpdateUserOpp(userId int, oppId int) error {
 	}
 	return err
 }
+
+// 每日更新签到数据
+func (u *Users) CronSignData() error {
+	user := Users{}
+	cnt, err := o.QueryTable(new(Users)).Count()
+	if err != nil {
+		log.Println("统计用户数量错误：", err.Error())
+		return err
+	}
+	for i := 1; i < int(cnt)-2; i++ {
+		user.Id = i
+		user.IsSign = 2
+		_, err = o.Update(&user, "IsSign")
+		if err != nil {
+			log.Println("每日更新用户签到信息错误：", err.Error())
+			return err
+		}
+	}
+	return err
+}
+
+// 每周更新抽奖数据
+func (u *Users) CronDrawData() error {
+	user := Users{}
+	cnt, err := o.QueryTable(new(Users)).Count()
+	if err != nil {
+		log.Println("统计用户数量错误：", err.Error())
+		return err
+	}
+	for i := 1; i < int(cnt)-2; i++ {
+		user.Id = i
+		user.IsDraw = 2
+		_, err = o.Update(&user, "IsDraw")
+		if err != nil {
+			log.Println("每周更新用户抽奖信息错误：", err.Error())
+			return err
+		}
+	}
+	return err
+}

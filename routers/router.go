@@ -14,6 +14,10 @@ func init() {
 	beego.Router("/ChooseOpponent", &controllers.UsersController{}, "get:ChooseOpponent")
 	beego.Router("/AddTargetScore", &controllers.UsersController{}, "get:AddTargetScore")
 	beego.Router("/AddRealScore", &controllers.UsersController{}, "get:AddRealScore")
+	beego.Router("/GetLoginUser", &controllers.UsersController{}, "get:GetLoginUser")
+	beego.Router("/GetUserScore", &controllers.UsersController{}, "get:GetUserScore")
+	beego.Router("/GetOppScore", &controllers.UsersController{}, "get:GetOppScore")
+	beego.Router("/GetOppInfo", &controllers.UsersController{}, "get:GetOppInfo")
 
 	beego.Router("/Login", &controllers.LoginController{}, "get:Login")
 	beego.Router("/Check", &controllers.LoginController{}, "get:Check")
@@ -22,4 +26,7 @@ func init() {
 	beego.Router("/CreateSign", &controllers.SignController{}, "get:CreateSign")
 
 	beego.Router("/CreateDraw", &controllers.DrawController{}, "get:CreateDraw")
+
+	beego.Router("/UpForm", &controllers.UploadController{}, "get:UpForm")
+	beego.Router("/UpFile", &controllers.UploadController{}, "post:UpFile")
 }
