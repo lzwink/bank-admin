@@ -18,6 +18,9 @@ func init() {
 	beego.Router("/GetUserScore", &controllers.UsersController{}, "get:GetUserScore")
 	beego.Router("/GetOppScore", &controllers.UsersController{}, "get:GetOppScore")
 	beego.Router("/GetOppInfo", &controllers.UsersController{}, "get:GetOppInfo")
+	beego.Router("/GetAllUsersGroup", &controllers.UsersController{}, "get:GetAllUsersGroup")
+	beego.Router("/GetUsersByGroupId", &controllers.UsersController{}, "get:GetUsersByGroupId")
+	beego.Router("/GetAllInfoById", &controllers.UsersController{}, "get:GetAllInfoById")
 
 	beego.Router("/Login", &controllers.LoginController{}, "get:Login")
 	beego.Router("/Check", &controllers.LoginController{}, "get:Check")

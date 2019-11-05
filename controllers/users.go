@@ -10,8 +10,9 @@ type UsersController struct {
 }
 
 var (
-	userModel  = models.Users{}
-	scoreModel = models.Score{}
+	userModel      = models.Users{}
+	scoreModel     = models.Score{}
+	userGroupModel = models.UsersGroup{}
 )
 
 func (ctx *UsersController) Get() {
@@ -184,4 +185,50 @@ func (ctx *UsersController) GetOppInfo() {
 		ctx.JsonEncode(101, "failed", nil, 0)
 	}
 	ctx.JsonEncode(0, "success", opp, 0)
+}
+
+// 获取用户分组列表
+func (ctx *UsersController) GetAllUsersGroup() {
+	res, err := userGroupModel.GetAllUsersGroup()
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", res, len(res))
+}
+
+// 根据分组编号获取用户列表
+func (ctx *UsersController) GetUsersByGroupId() {
+	groupId, _ := ctx.GetInt("groupId")
+	res, err := userModel.GetUserByGroupId(groupId)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	ctx.JsonEncode(0, "success", res, 0)
+}
+
+// 根据id获取信息
+func (ctx *UsersController) GetAllInfoById() {
+	id, _ := ctx.GetInt("id")
+	res := make(map[string]interface{}, 0)
+	user, err := userModel.GetUserById(id)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	res["user"] = user
+	opp, err := userModel.GetUserById(user.OpponentId)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	res["opp"] = opp
+	uScore, err := scoreModel.GetScoreByUserName(user.UserName)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	res["uScore"] = uScore
+	oScore, err := scoreModel.GetScoreByUserName(opp.UserName)
+	if err != nil {
+		ctx.JsonEncode(101, "failed", nil, 0)
+	}
+	res["oScore"] = oScore
+	ctx.JsonEncode(0, "success", res, 0)
 }
